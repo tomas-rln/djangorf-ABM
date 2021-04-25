@@ -1,2 +1,4 @@
 /VE_djangorf
-*/__pycache__
+*/__pycache__/*
+*.pyc
+*.log

@@ -17,3 +17,10 @@ def user_api_view(request):
             user_serializer.save()
             return Response(user_serializer.data)
         return Response(user_serializer.errors)
+
+@api_view(['GET','PUT'])
+def user_detail_view(request, pk):
+    if request.method == 'GET' and pk: 
+        user = User.objects.filter(id = pk).first()
+        user_serializer = UserSerializer(user) 
+        return Response(user_serializer.data)

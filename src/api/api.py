@@ -18,9 +18,23 @@ def user_api_view(request):
             return Response(user_serializer.data)
         return Response(user_serializer.errors)
 
-@api_view(['GET','PUT'])
+@api_view(['GET','PUT', 'DELETE'])
 def user_detail_view(request, pk):
-    if request.method == 'GET' and pk: 
-        user = User.objects.filter(id = pk).first()
+    user = User.objects.filter(id = pk).first()
+    if request.method == 'GET': 
         user_serializer = UserSerializer(user) 
         return Response(user_serializer.data)
+
+    if request.method == 'PUT':
+        user_serializer = UserSerializer(user, data=request.data)
+        if user_serializer.is_valid(): 
+            user_serializer.save()
+            return Response(user_serializer.data)
+        return Response(user_serializer.errors)
+    
+    if request.method == 'DELETE':
+        user = User.objects.filter(id = pk).first()
+        user.delete()
+        return Response({
+            "message": "deleted"
+        })
